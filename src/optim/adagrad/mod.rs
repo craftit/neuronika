@@ -3,9 +3,13 @@ use ndarray::{ArrayD, ArrayViewMutD, Zip};
 use rayon::iter::{IntoParallelRefMutIterator, ParallelIterator};
 use std::cell::{Cell, RefCell};
 
+#[cfg(feature = "serialize")]
+use serde::{Deserialize, Serialize};
+
 /// **Adagrad** optimizer.
 ///
 /// The algorithm has been proposed in [this paper](http://jmlr.org/papers/v12/duchi11a.html).
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 pub struct Adagrad<'a, T: Penalty> {
     params: RefCell<Vec<AdagradParam<'a>>>,
     lr: Cell<f32>,
@@ -83,8 +87,11 @@ impl<'a, T: Penalty> Adagrad<'a, T> {
 }
 
 /// A parameter used by the *Adagrad* optimizer.
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 pub struct AdagradParam<'a> {
+    #[cfg_attr(feature = "serialize", serde(skip))]
     data: ArrayViewMutD<'a, f32>,
+    #[cfg_attr(feature = "serialize", serde(skip))]
     grad: ArrayViewMutD<'a, f32>,
     step: usize,
     grad_sq: ArrayD<f32>,

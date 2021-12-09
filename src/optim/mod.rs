@@ -218,6 +218,9 @@ pub use rmsprop::{
 };
 pub use sgd::{SGDParam, SGDWithMomentum, SGDWithMomentumParam, SGD};
 
+#[cfg(feature = "serialize")]
+use serde::{Deserialize, Serialize};
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Optimizer Trait ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -265,6 +268,7 @@ pub trait Penalty: Send + Sync {
 }
 
 /// L2 penalty, also known as *weight decay* or *Tichonov regularization*.
+#[cfg_attr(feature = "serialize", derive(Serialize, Deserialize))]
 pub struct L2 {
     lambda: f32,
 }
@@ -281,6 +285,7 @@ impl L2 {
 }
 
 /// L1 penalty.
+#[cfg_attr(feature = "serialize", derive(Serialize, Deserialize))]
 pub struct L1 {
     lambda: f32,
 }
@@ -296,6 +301,7 @@ impl L1 {
     }
 }
 /// ElasticNet regularization, linearly combines the *L1* and *L2* penalties.
+#[cfg_attr(feature = "serialize", derive(Serialize, Deserialize))]
 pub struct ElasticNet {
     lambda_l1: f32,
     lambda_l2: f32,

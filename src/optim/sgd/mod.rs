@@ -3,9 +3,14 @@ use ndarray::{ArrayD, ArrayViewMutD, Zip};
 use rayon::iter::{IntoParallelRefMutIterator, ParallelIterator};
 use std::cell::{Cell, RefCell};
 
+#[cfg(feature = "serialize")]
+use serde::{Deserialize, Serialize};
+
 #[allow(clippy::upper_case_acronyms)]
+#[cfg_attr(feature = "serialize", derive(Serialize, Deserialize))]
 /// **Stochastic Gradient Descent** optimizer.
 pub struct SGD<'a, T> {
+    #[cfg_attr(feature = "serialize", serde(skip))]
     params: RefCell<Vec<SGDParam<'a>>>,
     lr: Cell<f32>,
     penalty: T,
